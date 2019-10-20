@@ -1,5 +1,6 @@
 ﻿namespace FSharpKoans
 open FSharpKoans.Core
+open System
 
 //---------------------------------------------------------------
 // Apply Your Knowledge!
@@ -60,6 +61,25 @@ module ``about the stock example`` =
 
     [<Koan>]
     let YouGotTheAnswerCorrect() =
-        let result =  __
-        
+        let parseInvariant a = 
+                Double.Parse(a, Globalization.CultureInfo.InvariantCulture)
+        let getDifference (x:string) =
+            let absdiff o c = 
+                parseInvariant o - parseInvariant c
+                |> abs
+                |> string
+            
+            let d = x.Split([|','|])
+            let difference = absdiff d.[1] d.[4]   
+            [|d.[0]; difference|]
+ 
+        let result = 
+            stockData
+            |> List.tail
+            |> List.map getDifference
+            |> List.sortByDescending (fun x -> x.[1])
+            //|> List.iter (fun x -> printfn "item: %A" x)
+            |> Seq.head
+            |> Seq.head
+        //printfn "Result: %A" result
         AssertEquality "2012-03-13" result
